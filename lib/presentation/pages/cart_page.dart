@@ -100,14 +100,6 @@ class _CartPageState extends State<CartPage> {
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           if (state is CartStateLoaded) {
-            int totalPrice = 0;
-            int totalItems = 0;
-
-            for (final cart in state.fruits) {
-              totalPrice += cart.price * cart.totalInCart;
-              totalItems += cart.totalInCart;
-            }
-
             if (state.fruits.isEmpty) {
               return Center(
                 child: Column(
@@ -149,7 +141,8 @@ class _CartPageState extends State<CartPage> {
                             child: FruitCartCard(fruit: state.fruits[i]),
                           );
                         } else {
-                          return _checkoutButton(totalItems, totalPrice);
+                          return _checkoutButton(
+                              state.totalItems, state.totalPrice);
                         }
                       },
                       itemCount: state.fruits.length + 1,

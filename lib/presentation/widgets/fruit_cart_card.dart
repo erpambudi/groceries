@@ -15,35 +15,19 @@ class FruitCartCard extends StatefulWidget {
 }
 
 class _FruitCartCardState extends State<FruitCartCard> {
-  int quantity = 0;
-
-  @override
-  void initState() {
-    setState(() {
-      quantity = widget.fruit.totalInCart;
-    });
-    super.initState();
-  }
+  int? quantity;
 
   _onAddQuantity() {
-    setState(() {
-      quantity = quantity + 1;
-    });
-    context.read<CartBloc>().add(UpdateCartFruitEvent(widget.fruit, quantity));
+    context.read<CartBloc>().add(AddQuantityFruitEvent(widget.fruit));
     context.read<CartBloc>().add(GetCartsEvent());
   }
 
   _onReduceQuantity() {
-    if (quantity == 1) {
-      _onRemoveItem();
-    } else {
-      setState(() {
-        quantity = quantity - 1;
-      });
-      context
-          .read<CartBloc>()
-          .add(UpdateCartFruitEvent(widget.fruit, quantity));
+    if (quantity != 1) {
+      context.read<CartBloc>().add(ReduceQuantityFruitEvent(widget.fruit));
       context.read<CartBloc>().add(GetCartsEvent());
+    } else {
+      _onRemoveItem();
     }
   }
 
@@ -91,6 +75,24 @@ class _FruitCartCardState extends State<FruitCartCard> {
               },
             ),
           ],
+        );
+      },
+    );
+  }
+
+  Widget _quantityBox() {
+    return BlocBuilder<CartBloc, CartState>(
+      builder: (context, state) {
+        if (state is CartStateLoaded) {
+          quantity = state.fruits
+              .firstWhere((fruit) => fruit.id == widget.fruit.id)
+              .totalInCart;
+        }
+        return Text(
+          (quantity != null) ? '$quantity' : '-',
+          style: TextStyle(
+            color: MyColor.blackTextColor,
+          ),
         );
       },
     );
@@ -229,12 +231,7 @@ class _FruitCartCardState extends State<FruitCartCard> {
                         const SizedBox(
                           width: 12,
                         ),
-                        Text(
-                          quantity.toString(),
-                          style: TextStyle(
-                            color: MyColor.blackTextColor,
-                          ),
-                        ),
+                        _quantityBox(),
                         const SizedBox(
                           width: 12,
                         ),

@@ -18,14 +18,22 @@ class SaveCartFruitEvent extends CartEvent {
   List<Object> get props => [fruit];
 }
 
-class UpdateCartFruitEvent extends CartEvent {
+class AddQuantityFruitEvent extends CartEvent {
   final Fruit fruit;
-  final int quantity;
 
-  const UpdateCartFruitEvent(this.fruit, this.quantity);
+  const AddQuantityFruitEvent(this.fruit);
 
   @override
-  List<Object> get props => [fruit, quantity];
+  List<Object> get props => [fruit];
+}
+
+class ReduceQuantityFruitEvent extends CartEvent {
+  final Fruit fruit;
+
+  const ReduceQuantityFruitEvent(this.fruit);
+
+  @override
+  List<Object> get props => [fruit];
 }
 
 class RemoveCartFruitEvent extends CartEvent {

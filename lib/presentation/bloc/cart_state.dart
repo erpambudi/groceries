@@ -13,11 +13,16 @@ class CartStateLoading extends CartState {}
 
 class CartStateLoaded extends CartState {
   final List<Fruit> fruits;
+  final int totalItems;
+  final int totalPrice;
 
-  const CartStateLoaded({required this.fruits});
+  const CartStateLoaded(
+      {required this.fruits,
+      required this.totalPrice,
+      required this.totalItems});
 
   @override
-  List<Object> get props => [fruits];
+  List<Object> get props => [fruits, totalItems, totalPrice];
 }
 
 class CartStateError extends CartState {
